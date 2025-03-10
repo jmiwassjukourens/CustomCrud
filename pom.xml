@@ -8,11 +8,11 @@
 		<version>3.4.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.andres.curso.springboot.app</groupId>
+	<groupId>com.customcrud.app</groupId>
 	<artifactId>springboot-crud</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>springboot-crud</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Demo project for Spring Boot by Juan Martin Iwassjuk</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
