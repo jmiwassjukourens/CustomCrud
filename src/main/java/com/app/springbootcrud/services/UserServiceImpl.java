@@ -91,18 +91,32 @@ public class UserServiceImpl implements UserService{
                 .orElseThrow(() -> new RuntimeException("User do not found with ID: " + id));
     }
     
-@Override
-@Transactional
-public User update(Long id, User userDetails) {
-    User existingUser = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
-
-    // Update only necessary fields
-    existingUser.setUsername(userDetails.getUsername());
-    existingUser.setRoles(userDetails.getRoles());
-    existingUser.setPassword(userDetails.getPassword());
- 
-    return repository.save(existingUser); // This will update the existing user
-}
+    @Override
+    @Transactional
+    public User update(Long id, User userDetails) {
+        System.out.println("pasa por aqui 4");
+        User existingUser = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
+        System.out.println("pasa por aqui 5");
+        System.out.println(existingUser.getId());
+        System.out.println(existingUser.getUsername());
+        System.out.println(existingUser.getRoles());
+        
+        // Actualizar campos necesarios
+        existingUser.setUsername(userDetails.getUsername());
+        
+        // Gestión de roles: se asigna siempre el rol "ROLE_USER"
+        Optional<Role> optionalRoleUser = roleRepository.findByName("ROLE_USER");
+        List<Role> roles = new ArrayList<>();
+        optionalRoleUser.ifPresent(roles::add);
+        existingUser.setRoles(roles);
+        
+        System.out.println("pasa por aqui 6");
+        // Si lo necesitas, puedes actualizar la contraseña u otros campos
+        // existingUser.setPassword(userDetails.getPassword());
+    
+        return repository.save(existingUser);
+    }
+    
     
 }

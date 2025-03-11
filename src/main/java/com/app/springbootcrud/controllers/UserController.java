@@ -25,7 +25,7 @@ import com.app.springbootcrud.services.UserService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "http://localhost:8080", originPatterns = "*")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8080"}, originPatterns = "*")
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -33,7 +33,7 @@ public class UserController {
     @Autowired
     private UserService service;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    //@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public List<User> list() {
         return service.findAll();
@@ -58,7 +58,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(user));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {
@@ -70,15 +70,18 @@ public class UserController {
     }
 
 
-@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+//@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 @PutMapping("/{id}")
 public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody User userDetails, BindingResult result) {
-    if (result.hasFieldErrors()) {
-        return validation(result);
-    }
+    userDetails.setPassword("asd"); // No debe ser nulo para la validacion pero igual el update no actualiza password
+    System.out.println("pasa x aqui 1");
+   
+    System.out.println("pasa x aqui 2");
 
     try {
+        System.out.println("pasa x aqui 3");
         User updatedUser = service.update(id, userDetails);
+        System.out.println("pasa x aqui 4");
         return ResponseEntity.ok(updatedUser);
     } catch (RuntimeException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", e.getMessage()));
